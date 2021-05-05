@@ -1,18 +1,15 @@
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
+# from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.app import App
 from kivy.uix.textinput import TextInput
 from datetime import datetime, date
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.dropdown import DropDown
+from kivy.uix.widget import Widget
+from kivy.graphics import Color, Ellipse, Line
+from random import random
 import os
-
-# Make update function so txt file gets newest save
-# Try stylizing
-# Try getting current info from first page
 
 
 class Control(GridLayout):
@@ -63,31 +60,17 @@ class Control(GridLayout):
         Drake.sm.current = "Display Info"
 
 
-class GetIt(FloatLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.list1 = "Horror, Comedy, Drama, Romance, Action, Adventure, Fantasy, Thriller"
-        self.dropdown = DropDown()
+class MyPaintWidget(Widget):
+    def on_touch_down(self, touch):
+        color = (random(), random(), random())
+        with self.canvas:
+            Color(*color)
+            d = 45.
+            Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
+            touch.ud['line'] = Line(points=(touch.x, touch.y))
 
-        for index in self.list1.split(","):
-            self.btn = Button(text="%s" % index, size_hint_y=None, height=50)
-            self.btn.bind(on_release=lambda btn: self.dropdown.select(self.btn.text))
-
-        self.mb = Button(text='Category', size_hint=(None, None))
-        self.mb.bind(on_release=self.dropdown.open)
-
-        self.gb = Button(text="Next", size_hint_y=None)
-        self.gb.bind(on_press=self.out_click)
-
-        self.add_widget(self.gb)
-        self.dropdown.add_widget(self.btn)
-
-        self.dropdown.bind(on_select=lambda instance, x: setattr(self.mb, 'text', x))
-        self.add_widget(self.mb)
-
-    @staticmethod
-    def out_click(instance):
-        Drake.sm.current = "Ghost"
+    def on_touch_move(self, touch):
+        touch.ud['line'].points += [touch.x, touch.y]
 
 
 class Information(GridLayout):
@@ -114,12 +97,6 @@ class Information(GridLayout):
         Drake.sm.current = "Movie"
 
 
-class Drawing(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.add_widget(Label(text="Test"))
-
-
 class BackApp(App):
     def build(self):
         self.sm = ScreenManager()
@@ -134,14 +111,9 @@ class BackApp(App):
         screen.add_widget(self.info)
         self.sm.add_widget(screen)
 
-        self.movie = GetIt()
+        self.movie = MyPaintWidget()
         screen = Screen(name="Movie")
         screen.add_widget(self.movie)
-        self.sm.add_widget(screen)
-
-        self.childe = Drawing()
-        screen = Screen(name="Ghost")
-        screen.add_widget(self.childe)
         self.sm.add_widget(screen)
 
         return self.sm
