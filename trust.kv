@@ -1,0 +1,35 @@
+# filename: learning.py
+<MyBigButton@TextInput>:
+    text_size: 30
+    font_size: '20sp'
+    write_tab: False
+
+<Exp>:
+    cols: 2
+
+    Label:
+        text: "Username"
+        font_size: 25
+    MyBigButton:
+        id: user
+        hint_text: "Enter Username"
+        text:
+
+    Label:
+        text: "Email"
+        font_size: 25
+    MyBigButton:
+        id: email
+        hint_text: "Enter Email"
+
+    Label:
+        text: "Password"
+        font_size: 25
+    MyBigButton:
+        id: password
+        hint_text: "Enter Password"
+
+    Label:
+    Button:
+        text: "Join"
+        on_press: app.btn_click()
