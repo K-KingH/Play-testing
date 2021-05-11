@@ -1,9 +1,17 @@
-from kivy.uix.gridlayout import GridLayout
 from kivy.app import App
 from datetime import datetime, date
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 
-class Exp(GridLayout):
+class Visible(Screen):
+    pass
+
+
+class Exp(Screen):
+    pass
+
+
+class Manager(ScreenManager):
     pass
 
 
@@ -20,7 +28,9 @@ class Trust(App):
 
         with open("pass.txt", "w") as f:
             f.write(f"{user}, {email}, {password}")
-        m = f"Joined on {now} at {d} as {user}.\n Email: {email}"
+        print(f"Joined on {now} at {d} as {user}.\n Email: {email}")
 
 
-Trust().run()
+if __name__ == "__main__":
+    test = Trust()
+    test.run()
